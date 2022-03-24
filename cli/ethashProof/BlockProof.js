@@ -1,4 +1,4 @@
-const { DagProof, getBlockByNumber } = require("../../tools/eth2hmy-relay");
+const { DagProof, getBlockByNumber } = require("../../tools/eth2astra-relay");
 const { BlockHeader } = require("@ethereumjs/block");
 
 let dagProof;

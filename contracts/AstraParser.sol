@@ -5,7 +5,7 @@ pragma experimental ABIEncoderV2;
 import "./lib/RLPReader.sol";
 import "./lib/RLPEncode.sol";
 
-library HarmonyParser {
+library AstraParser {
     using RLPReader for bytes;
     using RLPReader for uint256;
     using RLPReader for RLPReader.RLPItem;
@@ -38,7 +38,7 @@ library HarmonyParser {
         bytes vrf;
         bytes vdf;
         bytes shardState;
-        bytes crossLink;
+        bytes crossAstraAstraLink;
         bytes slashes;
         bytes mmrRoot;
     }
@@ -133,7 +133,7 @@ library HarmonyParser {
         list[20] = RLPEncode.encodeBytes(header.vdf);
 
         list[21] = RLPEncode.encodeBytes(header.shardState);
-        list[22] = RLPEncode.encodeBytes(header.crossLink);
+        list[22] = RLPEncode.encodeBytes(header.crossAstraAstraLink);
         list[23] = RLPEncode.encodeBytes(header.slashes);
         list[24] = RLPEncode.encodeBytes(header.mmrRoot);
 
@@ -183,7 +183,7 @@ library HarmonyParser {
             else if (idx == 19) header.vrf = it.next().toBytes();
             else if (idx == 20) header.vdf = it.next().toBytes();
             else if (idx == 21) header.shardState = it.next().toBytes();
-            else if (idx == 22) header.crossLink = it.next().toBytes();
+            else if (idx == 22) header.crossAstraAstraLink = it.next().toBytes();
             else if (idx == 23) header.slashes = it.next().toBytes();
             else if (idx == 24) header.mmrRoot = it.next().toBytes();
             else it.next();

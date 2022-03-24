@@ -1,10 +1,10 @@
 const { ethers } = require("hardhat");
 require("dotenv").config();
-const { getBlockByNumber } = require("../tools/eth2hmy-relay/lib/getBlockHeader.js");
+const { getBlockByNumber } = require("../tools/eth2astra-relay/lib/getBlockHeader.js");
 
 // works with kovan
-// npx hardhat run --network localnet scripts/deploy_hmy_side.js
-async function deployHmySideContracts() {
+// npx hardhat run --network localnet scripts/deploy_astra_side.js
+async function deployAstraSideContracts() {
   // const Prime = await ethers.getContractFactory("Prime");
   // const prime = await Prime.deploy();
   // await prime.deployed();
@@ -18,7 +18,7 @@ async function deployHmySideContracts() {
   // await merkleProof.deployed();
 
   const url = process.env.ETH_NODE_URL;
-  const blockNum = 27625582;
+  const blockNum = 12125940;
   const initHeader = await getBlockByNumber(url, blockNum);
 
   const EthereumLightClient = await ethers.getContractFactory(
@@ -35,7 +35,7 @@ async function deployHmySideContracts() {
     [initHeader.serialize()],
     {
       initializer: "initialize",
-      // unsafeAllowLinkedLibraries: true
+      // unsafeAllowAstraAstraLinkedLibraries: true
     }
   );
   console.log("EthereumLightClient deployed to:", ethLightClient.address);
@@ -47,24 +47,24 @@ async function deployHmySideContracts() {
   // await prover.deployed();
 
   // deploy token locker
-  const TokenLockerOnHarmony = await ethers.getContractFactory(
-    "TokenLockerOnHarmony",
+  const TokenLockerOnAstra = await ethers.getContractFactory(
+    "TokenLockerOnAstra",
   );
-  const tokenLockerOnHarmony = await upgrades.deployProxy(
-    TokenLockerOnHarmony,
+  const tokenLockerOnAstra = await upgrades.deployProxy(
+    TokenLockerOnAstra,
     [],
     {
       initializer: "initialize",
-      // unsafeAllowLinkedLibraries: true
+      // unsafeAllowAstraAstraLinkedLibraries: true
     }
   );
-  console.log("TokenLockerOnHarmony deployed to:", tokenLockerOnHarmony.address);
+  console.log("TokenLockerOnAstra deployed to:", tokenLockerOnAstra.address);
 
-  return [ethLightClient.address, tokenLockerOnHarmony.address];
+  return [ethLightClient.address, tokenLockerOnAstra.address];
 }
 
-// module.exports = {deployHmySideContracts};
-deployHmySideContracts()
+// module.exports = {deployAstraSideContracts};
+deployAstraSideContracts()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

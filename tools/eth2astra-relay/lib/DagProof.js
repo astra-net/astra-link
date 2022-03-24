@@ -18,6 +18,15 @@ function loadCache(name) {
     const fcache = JSON.parse(data);
     return fcache.map(el=>Buffer.from(el, 'hex'));
 }
+class Rectangle {
+    height = 0;
+    width;
+    constructor(height, width) {
+      this.height = height;
+      this.width = width;
+    }
+  }
+  
 
 class DagProof {
     merkel;ethash;epoch;fullSize;

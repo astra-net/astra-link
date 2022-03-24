@@ -10,17 +10,17 @@ ETH_NODE_URL=process.env.ETH_NODE_URL;
 
 module.exports = {
   networks: {
-    hmy_local: {
+    astra_local: {
       provider: () => new HDWalletProvider(privateKey, localnet),
       network_id: 1666700000,
       skipDryRun: true,
     },
-    hmy_test: {
+    astra_test: {
       provider: () => new HDWalletProvider(privateKey, testnet),
       network_id: 1666700000,
       skipDryRun: true,
     },
-    hmy_main: {
+    astra_main: {
       provider: () => new HDWalletProvider(privateKey, mainnet),
       network_id: 1666600000,
       skipDryRun: true,

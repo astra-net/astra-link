@@ -1,7 +1,7 @@
 {
   "name": "soccerplayers.app",
   "version": "1.0.0",
-  "description": "Harmony soccerplayers.app",
+  "description": "Astra soccerplayers.app",
   "main": "truffle.js",
   "scripts": {
     "libInit": "tar -zxf ethereumjs-ethash-dist.tar.gz -C node_modules/@ethereumjs/ethash"

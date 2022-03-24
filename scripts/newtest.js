@@ -6,8 +6,8 @@ const Web3 = require("web3");
 const { toRLPHeader, rpcWrapper, getReceiptProof } = require("./utils");
 
 let mmrVerifier, MMRVerifier;
-let prover, HarmonyProver;
-let lightclient, HarmonyLightClient;
+let prover, AstraProver;
+let lightclient, AstraLightClient;
 let tokenLockerOnEthereum, TokenLockerOnEthereum;
 
 function hexToBytes(hex) {
@@ -22,7 +22,7 @@ async function getMmrProof(txnHash, refBlockNum) {
         .bind(web3.currentProvider);
     return await sendRpc({
         jsonrpc: "2.0",
-        method: "hmyv2_getTxMmrProof",
+        method: "astrav2_getTxMmrProof",
         params: [txnHash, web3.utils.toDecimal(refBlockNum)],
         id: (new Date()).getTime(),
     });
@@ -35,7 +35,7 @@ async function fetchBlock(blockNumber) {
         .bind(web3.currentProvider);
     return await sendRpc({
         jsonrpc: "2.0",
-        method: "hmyv2_getFullHeader",
+        method: "astrav2_getFullHeader",
         params: [blockNumber],
         id: (new Date()).getTime(),
     });
@@ -48,17 +48,17 @@ async function deploy() {
     await mmrVerifier.deployed();
     console.log("MMRVerifier deployed to:", mmrVerifier.address);
 
-    HarmonyProver = await ethers.getContractFactory(
-        "HarmonyProver",
+    AstraProver = await ethers.getContractFactory(
+        "AstraProver",
         {
             libraries: {
                 MMRVerifier: mmrVerifier.address
             }
         }
     );
-    prover = await HarmonyProver.deploy();
+    prover = await AstraProver.deploy();
     await prover.deployed();
-    console.log("HarmonyProver deployed to:", prover.address);
+    console.log("AstraProver deployed to:", prover.address);
 
     let initialBlock = "0xe";
     let response = await fetchBlock(initialBlock);
@@ -68,17 +68,17 @@ async function deploy() {
     let relayers = ["0x0B585F8DaEfBC68a311FbD4cB20d9174aD174016"];
     let threshold = 1;
 
-    HarmonyLightClient = await ethers.getContractFactory("HarmonyLightClient");
+    AstraLightClient = await ethers.getContractFactory("AstraLightClient");
 
     lightclient = await upgrades.deployProxy(
-        HarmonyLightClient,
+        AstraLightClient,
         [initialBlockRlp, relayers, threshold],
         {
             initializer: "initialize"
         }
     );
-    // lightclient = await HarmonyLightClient.deploy(initialBlockRlp, relayers, threshold);
-    console.log("HarmonyLightClient deployed to:", lightclient.address);
+    // lightclient = await AstraLightClient.deploy(initialBlockRlp, relayers, threshold);
+    console.log("AstraLightClient deployed to:", lightclient.address);
 
     let epoch = response.result.epoch;
     let mmrRoot = response.result.mmrRoot;
@@ -90,7 +90,7 @@ async function deploy() {
         "TokenLockerOnEthereum",
         {
             libraries: {
-                HarmonyProver: prover.address
+                AstraProver: prover.address
             }
         }
     );
@@ -99,7 +99,7 @@ async function deploy() {
         [],
         {
             initializer: "initialize",
-            unsafeAllowLinkedLibraries: true
+            unsafeAllowAstraAstraLinkedLibraries: true
         }
     );
     console.log("TokenLockerOnEthereum deployed to:", tokenLockerOnEthereum.address);

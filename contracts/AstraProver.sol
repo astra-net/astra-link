@@ -5,13 +5,13 @@ pragma experimental ABIEncoderV2;
 // largely based on
 // https://github.com/loredanacirstea/goldengate/blob/master/contracts/contracts/Prover.sol
 
-import "./HarmonyParser.sol";
-import "./HarmonyLightClient.sol";
+import "./AstraParser.sol";
+import "./AstraLightClient.sol";
 import "./lib/MMRVerifier.sol";
 import "./lib/ECVerify.sol";
 import "./lib/MPT.sol";
 
-library HarmonyProver {
+library AstraProver {
     using MPT for MPT.MerkleProof;
 
     function verifyTrieProof(MPT.MerkleProof memory data)
@@ -23,10 +23,10 @@ library HarmonyProver {
     }
 
     function verifyHeader(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MMRVerifier.MMRProof memory proof
     ) internal pure returns (bool valid, string memory reason) {
-        bytes32 blockHash = HarmonyParser.getBlockHash(header);
+        bytes32 blockHash = AstraParser.getBlockHash(header);
         if (blockHash != header.hash)
             return (false, "Header data or hash invalid");
 
@@ -45,7 +45,7 @@ library HarmonyProver {
     }
 
     function verifyTransaction(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MPT.MerkleProof memory txdata
     ) internal pure returns (bool valid, string memory reason) {
         if (header.transactionsRoot != txdata.expectedRoot)
@@ -58,7 +58,7 @@ library HarmonyProver {
     }
 
     function verifyReceipt(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MPT.MerkleProof memory receiptdata
     ) internal pure returns (bool valid, string memory reason) {
         if (header.receiptsRoot != receiptdata.expectedRoot)
@@ -71,7 +71,7 @@ library HarmonyProver {
     }
 
     function verifyAccount(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MPT.MerkleProof memory accountdata
     ) internal pure returns (bool valid, string memory reason) {
         if (header.stateRoot != accountdata.expectedRoot)
@@ -88,12 +88,12 @@ library HarmonyProver {
         bytes memory logdata,
         uint256 logIndex
     ) internal pure returns (bool valid, string memory reason) {
-        HarmonyParser.TransactionReceiptTrie memory receipt = HarmonyParser
+        AstraParser.TransactionReceiptTrie memory receipt = AstraParser
             .toReceipt(receiptdata.expectedValue);
 
         if (
             keccak256(logdata) ==
-            keccak256(HarmonyParser.getLog(receipt.logs[logIndex]))
+            keccak256(AstraParser.getLog(receipt.logs[logIndex]))
         ) {
             return (true, "");
         }
@@ -101,12 +101,12 @@ library HarmonyProver {
     }
 
     function verifyTransactionAndStatus(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MPT.MerkleProof memory receiptdata
     ) internal pure returns (bool valid, string memory reason) {}
 
     function verifyCode(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MPT.MerkleProof memory accountdata
     ) internal pure returns (bool valid, string memory reason) {}
 
@@ -114,7 +114,7 @@ library HarmonyProver {
         MPT.MerkleProof memory accountProof,
         MPT.MerkleProof memory storageProof
     ) internal pure returns (bool valid, string memory reason) {
-        HarmonyParser.Account memory account = HarmonyParser.toAccount(
+        AstraParser.Account memory account = AstraParser.toAccount(
             accountProof.expectedValue
         );
 
@@ -131,9 +131,9 @@ library HarmonyProver {
         MPT.MerkleProof memory txdata,
         uint256 chainId
     ) internal pure returns (address sender) {
-        HarmonyParser.Transaction memory transaction = HarmonyParser
+        AstraParser.Transaction memory transaction = AstraParser
             .toTransaction(txdata.expectedValue);
-        bytes memory txraw = HarmonyParser.getTransactionRaw(
+        bytes memory txraw = AstraParser.getTransactionRaw(
             transaction,
             chainId
         );
@@ -155,7 +155,7 @@ library HarmonyProver {
         hash = keccak256(signedTransaction);
     }
 
-    function getBlockHash(HarmonyParser.BlockHeader memory header)
+    function getBlockHash(AstraParser.BlockHeader memory header)
         internal
         pure
         returns (bytes32 hash)
@@ -163,65 +163,65 @@ library HarmonyProver {
         return keccak256(getBlockRlpData(header));
     }
 
-    function getBlockRlpData(HarmonyParser.BlockHeader memory header)
+    function getBlockRlpData(AstraParser.BlockHeader memory header)
         internal
         pure
         returns (bytes memory data)
     {
-        return HarmonyParser.getBlockRlpData(header);
+        return AstraParser.getBlockRlpData(header);
     }
 
     function toBlockHeader(bytes memory data)
         internal
         pure
-        returns (HarmonyParser.BlockHeader memory header)
+        returns (AstraParser.BlockHeader memory header)
     {
-        return HarmonyParser.toBlockHeader(data);
+        return AstraParser.toBlockHeader(data);
     }
 
-    function getLog(HarmonyParser.Log memory log)
+    function getLog(AstraParser.Log memory log)
         internal
         pure
         returns (bytes memory data)
     {
-        return HarmonyParser.getLog(log);
+        return AstraParser.getLog(log);
     }
 
     function getReceiptRlpData(
-        HarmonyParser.TransactionReceiptTrie memory receipt
+        AstraParser.TransactionReceiptTrie memory receipt
     ) internal pure returns (bytes memory data) {
-        return HarmonyParser.getReceiptRlpData(receipt);
+        return AstraParser.getReceiptRlpData(receipt);
     }
 
     function toReceiptLog(bytes memory data)
         internal
         pure
-        returns (HarmonyParser.Log memory log)
+        returns (AstraParser.Log memory log)
     {
-        return HarmonyParser.toReceiptLog(data);
+        return AstraParser.toReceiptLog(data);
     }
 
     function toReceipt(bytes memory data)
         internal
         pure
-        returns (HarmonyParser.TransactionReceiptTrie memory receipt)
+        returns (AstraParser.TransactionReceiptTrie memory receipt)
     {
-        return HarmonyParser.toReceipt(data);
+        return AstraParser.toReceipt(data);
     }
 
     function toTransaction(bytes memory data)
         internal
         pure
-        returns (HarmonyParser.Transaction memory transaction)
+        returns (AstraParser.Transaction memory transaction)
     {
-        return HarmonyParser.toTransaction(data);
+        return AstraParser.toTransaction(data);
     }
 
     function toAccount(bytes memory data)
         internal
         pure
-        returns (HarmonyParser.Account memory account)
+        returns (AstraParser.Account memory account)
     {
-        return HarmonyParser.toAccount(data);
+        return AstraParser.toAccount(data);
     }
 }

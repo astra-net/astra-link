@@ -5,7 +5,7 @@ const { rpcWrapper, getReceiptProof } = require('../scripts/utils');
 
 const { expect } = require('chai');
 
-let MMRVerifier, HarmonyProver;
+let MMRVerifier, AstraProver;
 let prover, mmrVerifier;
 
 function hexToBytes(hex) {
@@ -14,22 +14,22 @@ function hexToBytes(hex) {
     return bytes;
 }
 
-describe('HarmonyProver', function () {
+describe('AstraProver', function () {
     beforeEach(async function () {
         MMRVerifier = await ethers.getContractFactory("MMRVerifier");
         mmrVerifier = await MMRVerifier.deploy();
         await mmrVerifier.deployed();
 
-        // await HarmonyProver.link('MMRVerifier', mmrVerifier);
-        HarmonyProver = await ethers.getContractFactory(
-            "HarmonyProver",
+        // await AstraProver.astraLink('MMRVerifier', mmrVerifier);
+        AstraProver = await ethers.getContractFactory(
+            "AstraProver",
             {
                 libraries: {
                     MMRVerifier: mmrVerifier.address
                 }
             }
         );
-        prover = await HarmonyProver.deploy();
+        prover = await AstraProver.deploy();
         await prover.deployed();
     });
 
@@ -64,7 +64,7 @@ describe('HarmonyProver', function () {
 });
 
 let TokenLockerOnEthereum, tokenLocker;
-let HarmonyLightClient, lightclient;
+let AstraLightClient, lightclient;
 
 describe('TokenLocker', function () {
     beforeEach(async function () {
@@ -74,16 +74,16 @@ describe('TokenLocker', function () {
 
         await tokenLocker.bind(tokenLocker.address);
 
-        // // await HarmonyProver.link('MMRVerifier', mmrVerifier);
-        // HarmonyProver = await ethers.getContractFactory(
-        //     "HarmonyProver",
+        // // await AstraProver.astraLink('MMRVerifier', mmrVerifier);
+        // AstraProver = await ethers.getContractFactory(
+        //     "AstraProver",
         //     {
         //         libraries: {
         //             MMRVerifier: mmrVerifier.address
         //         }
         //     }
         // );
-        // prover = await HarmonyProver.deploy();
+        // prover = await AstraProver.deploy();
         // await prover.deployed();
 
         

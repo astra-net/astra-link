@@ -1,2 +1,1 @@
-# Horizon Bridge Documentation and API reference
-
+# AstraLink Bridge Documentation and API reference

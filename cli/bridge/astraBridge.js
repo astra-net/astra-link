@@ -1,11 +1,11 @@
 const { Bridge } = require('./bridge');
-const { HmyWeb3 } = require('../lib/hmyWeb3');
-const BridgeSol = require("./abi/TokenLockerOnHarmony.json");
+const { AstraWeb3 } = require('../lib/astraWeb3');
+const BridgeSol = require("./abi/TokenLockerOnAstra.json");
 
 
-class HmyBridge extends Bridge {
+class AstraBridge extends Bridge {
     constructor(rpcUrl, bridgeAddress) {
-        const web3 = new HmyWeb3(rpcUrl);
+        const web3 = new AstraWeb3(rpcUrl);
         const contract = web3.ContractAt(BridgeSol.abi, bridgeAddress);
         // const hprove = null; // TODO
         const { EProver } = require('../../tools/eprover');
@@ -15,13 +15,17 @@ class HmyBridge extends Bridge {
     }
 
     static async deploy(rpcUrl) {
-        let web3 = new HmyWeb3(rpcUrl);
+        console.log({ rpcUrl });
+        let web3 = new AstraWeb3(rpcUrl);
+        console.log("about to deploy")
         const tx = web3.ContractDeploy(BridgeSol.abi, BridgeSol.bytecode);
+        console.log("deployed");
         const contract = await web3.sendTx(tx); //options.address
-        return new HmyBridge(rpcUrl, contract._address);
+        console.log("tx");
+        return new AstraBridge(rpcUrl, contract._address);
     }
 }
 
 module.exports = {
-    HmyBridge
+    AstraBridge
 }

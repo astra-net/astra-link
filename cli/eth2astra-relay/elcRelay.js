@@ -1,10 +1,10 @@
 const ElcABI = require("../../tools/elc/abi/EthereumLightClient.json");
 const { getBlockByNumber, getHeaderProof } = require('../ethashProof/BlockProof');
-const { HmyWeb3 } = require('../lib/hmyWeb3');
+const { AstraWeb3 } = require('../lib/astraWeb3');
 const Web3 = require('web3');
 
-async function blockRelay(dagPath, ethUrl, hmyWeb3, elcAddress) {
-    const client = hmyWeb3.ContractAt(ElcABI.abi, elcAddress);
+async function blockRelay(dagPath, ethUrl, astraWeb3, elcAddress) {
+    const client = astraWeb3.ContractAt(ElcABI.abi, elcAddress);
     const clientMethods = client.methods;
     const lastBlockNo = await clientMethods.getBlockHeightMax().call();
     console.log("ELC last block number:", lastBlockNo);
@@ -26,11 +26,11 @@ async function blockRelay(dagPath, ethUrl, hmyWeb3, elcAddress) {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function blockRelayLoop(dagPath, ethUrl, hmyUrl, elcAddress) {
-    const hmyWeb3 = new HmyWeb3(hmyUrl);
+async function blockRelayLoop(dagPath, ethUrl, astraUrl, elcAddress) {
+    const astraWeb3 = new AstraWeb3(astraUrl);
     while (1) {
         try {
-            blockRelay(dagPath, ethUrl, hmyWeb3, elcAddress);
+            blockRelay(dagPath, ethUrl, astraWeb3, elcAddress);
         } catch (e) {
             console.error(e);
         }

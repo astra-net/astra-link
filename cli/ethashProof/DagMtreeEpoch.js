@@ -1,4 +1,4 @@
-const { DagProof } = require("../../tools/eth2hmy-relay");
+const { DagProof } = require("../../tools/eth2astra-relay");
 
 function generateDagMTree(dagPath, epoch) {
     const dagProof = new DagProof(dagPath);

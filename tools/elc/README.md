@@ -1,4 +1,4 @@
-# Horizon Ethereum Light Client (ELC) on Harmony
+# AstraAstraLink Ethereum Light Client (ELC) on Astra
 Ethereum Light Client (ELC) is a SPV-based light client implemented as a smart contract that receives and stores Ethereum block header information.
 
 ## Requirements

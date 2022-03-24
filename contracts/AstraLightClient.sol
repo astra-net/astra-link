@@ -2,7 +2,7 @@
 pragma solidity 0.7.3;
 pragma experimental ABIEncoderV2;
 
-import "./HarmonyParser.sol";
+import "./AstraParser.sol";
 import "./lib/SafeCast.sol";
 import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 // import "openzeppelin-solidity/contracts/proxy/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
 
-contract HarmonyLightClient is
+contract AstraLightClient is
     Initializable,
     PausableUpgradeable,
     AccessControlUpgradeable
@@ -109,7 +109,7 @@ contract HarmonyLightClient is
         address[] memory initialRelayers,
         uint8 initialRelayerThreshold
     ) external initializer {
-        HarmonyParser.BlockHeader memory header = HarmonyParser.toBlockHeader(
+        AstraParser.BlockHeader memory header = AstraParser.toBlockHeader(
             firstRlpHeader
         );
         
@@ -121,7 +121,7 @@ contract HarmonyLightClient is
         firstBlock.epoch = header.epoch;
         firstBlock.shard = header.shardID;
         firstBlock.time = header.timestamp;
-        firstBlock.mmrRoot = HarmonyParser.toBytes32(header.mmrRoot);
+        firstBlock.mmrRoot = AstraParser.toBytes32(header.mmrRoot);
         firstBlock.hash = header.hash;
         
         epochCheckPointBlockNumbers[header.epoch].push(header.number);
@@ -138,7 +138,7 @@ contract HarmonyLightClient is
     }
 
     function submitCheckpoint(bytes memory rlpHeader) external onlyRelayers whenNotPaused {
-        HarmonyParser.BlockHeader memory header = HarmonyParser.toBlockHeader(
+        AstraParser.BlockHeader memory header = AstraParser.toBlockHeader(
             rlpHeader
         );
 
@@ -152,7 +152,7 @@ contract HarmonyLightClient is
         checkPointBlock.epoch = header.epoch;
         checkPointBlock.shard = header.shardID;
         checkPointBlock.time = header.timestamp;
-        checkPointBlock.mmrRoot = HarmonyParser.toBytes32(header.mmrRoot);
+        checkPointBlock.mmrRoot = AstraParser.toBytes32(header.mmrRoot);
         checkPointBlock.hash = header.hash;
         
         epochCheckPointBlockNumbers[header.epoch].push(header.number);

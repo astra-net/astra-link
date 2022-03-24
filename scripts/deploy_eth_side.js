@@ -11,7 +11,7 @@ async function fetchBlock(blockNumber) {
       .bind(web3.currentProvider);
   return await sendRpc({
       jsonrpc: "2.0",
-      method: "hmyv2_getFullHeader",
+      method: "astrav2_getFullHeader",
       params: [blockNumber],
       id: (new Date()).getTime(),
   });
@@ -24,15 +24,15 @@ async function deployEthSideContracts() {
   // const mmrVerifier = await MMRVerifier.deploy();
   // await mmrVerifier.deployed();
 
-  // const HarmonyProver = await ethers.getContractFactory(
-  //   "HarmonyProver",
+  // const AstraProver = await ethers.getContractFactory(
+  //   "AstraProver",
   //   // {
   //   //   libraries: {
   //   //     MMRVerifier: mmrVerifier.address
   //   //   }
   //   // }
   // );
-  // const prover = await HarmonyProver.deploy();
+  // const prover = await AstraProver.deploy();
   // await prover.deployed();
 
   const initialBlock = "0xe";
@@ -43,23 +43,23 @@ async function deployEthSideContracts() {
   const relayers = ["0x0B585F8DaEfBC68a311FbD4cB20d9174aD174016"];
   const threshold = 1;
 
-  const HarmonyLightClient = await ethers.getContractFactory("HarmonyLightClient");
+  const AstraLightClient = await ethers.getContractFactory("AstraLightClient");
 
-  const harmonyLightClient = await upgrades.deployProxy(
-    HarmonyLightClient,
+  const astraLightClient = await upgrades.deployProxy(
+    AstraLightClient,
     [initialBlockRlp, relayers, threshold],
     {
       initializer: "initialize"
     }
   );
-  console.log("HarmonyLightClient deployed to:", harmonyLightClient.address);
+  console.log("AstraLightClient deployed to:", astraLightClient.address);
 
   // deploy token locker
   const TokenLockerOnEthereum = await ethers.getContractFactory(
     "TokenLockerOnEthereum",
     // {
     //   libraries: {
-    //     HarmonyProver: prover.address
+    //     AstraProver: prover.address
     //   }
     // }
   );
@@ -68,11 +68,11 @@ async function deployEthSideContracts() {
     [],
     {
       initializer: "initialize",
-      unsafeAllowLinkedLibraries: true
+      unsafeAllowAstraAstraLinkedLibraries: true
     }
   );
   console.log("TokenLockerOnEthereum deployed to:", tokenLockerOnEthereum.address);
-  return [harmonyLightClient.address, tokenLockerOnEthereum.address]
+  return [astraLightClient.address, tokenLockerOnEthereum.address]
 }
 
 // module.exports = {deployEthSideContracts};

@@ -1,7 +1,7 @@
 const yargs = require('yargs');
-const { DagProof } = require("../eth2hmy-relay/lib/DagProof");
+const { DagProof } = require("../eth2astra-relay/lib/DagProof");
 const EthashUtil = require('@ethereumjs/ethash/dist/util');
-const { getBlockByNumber } = require("../eth2hmy-relay/lib/getBlockHeader.js");
+const { getBlockByNumber } = require("../eth2astra-relay/lib/getBlockHeader.js");
 const fs = require('fs');
 
 const argv = yargs

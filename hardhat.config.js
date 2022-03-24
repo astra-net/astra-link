@@ -17,11 +17,11 @@ module.exports = {
             accounts: [`0x${HARMONY_PRIVATE_KEY}`]
         },
         testnet: {
-            url: `https://api.s0.b.hmny.io`,
+            url: `https://api.s0.b.astra.io`,
             accounts: [`0x${HARMONY_PRIVATE_KEY}`]
         },
         mainnet: {
-            url: `https://api.harmony.one`,
+            url: `https://api.astra.one`,
             accounts: [`0x${HARMONY_PRIVATE_KEY}`]
         },
         kovan: {

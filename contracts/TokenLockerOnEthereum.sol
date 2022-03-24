@@ -2,14 +2,14 @@
 pragma solidity 0.7.3;
 pragma experimental ABIEncoderV2;
 
-import "./HarmonyLightClient.sol";
+import "./AstraLightClient.sol";
 import "./lib/MMRVerifier.sol";
-import "./HarmonyProver.sol";
+import "./AstraProver.sol";
 import "./TokenLocker.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract TokenLockerOnEthereum is TokenLocker, OwnableUpgradeable {
-    HarmonyLightClient public lightclient;
+    AstraLightClient public lightclient;
 
     mapping(bytes32 => bool) public spentReceipt;
 
@@ -17,7 +17,7 @@ contract TokenLockerOnEthereum is TokenLocker, OwnableUpgradeable {
         __Ownable_init();
     }
 
-    function changeLightClient(HarmonyLightClient newClient)
+    function changeLightClient(AstraLightClient newClient)
         external
         onlyOwner
     {
@@ -29,14 +29,14 @@ contract TokenLockerOnEthereum is TokenLocker, OwnableUpgradeable {
     }
 
     function validateAndExecuteProof(
-        HarmonyParser.BlockHeader memory header,
+        AstraParser.BlockHeader memory header,
         MMRVerifier.MMRProof memory mmrProof,
         MPT.MerkleProof memory receiptdata
     ) external {
         require(lightclient.isValidCheckPoint(header.epoch, mmrProof.root), "checkpoint validation failed");
-        bytes32 blockHash = HarmonyParser.getBlockHash(header);
+        bytes32 blockHash = AstraParser.getBlockHash(header);
         bytes32 rootHash = header.receiptsRoot;
-        (bool status, string memory message) = HarmonyProver.verifyHeader(
+        (bool status, string memory message) = AstraProver.verifyHeader(
             header,
             mmrProof
         );
@@ -45,7 +45,7 @@ contract TokenLockerOnEthereum is TokenLocker, OwnableUpgradeable {
             abi.encodePacked(blockHash, rootHash, receiptdata.key)
         );
         require(spentReceipt[receiptHash] == false, "double spent!");
-        (status, message) = HarmonyProver.verifyReceipt(header, receiptdata);
+        (status, message) = AstraProver.verifyReceipt(header, receiptdata);
         require(status, "receipt data could not be verified");
         spentReceipt[receiptHash] = true;
         uint256 executedEvents = execute(receiptdata.expectedValue);

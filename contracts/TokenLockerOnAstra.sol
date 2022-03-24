@@ -7,7 +7,7 @@ import "./EthereumLightClient.sol";
 import "./EthereumProver.sol";
 import "./TokenLocker.sol";
 
-contract TokenLockerOnHarmony is TokenLocker, OwnableUpgradeable {
+contract TokenLockerOnAstra is TokenLocker, OwnableUpgradeable {
     using RLPReader for RLPReader.RLPItem;
     using RLPReader for bytes;
     using SafeMathUpgradeable for uint256;

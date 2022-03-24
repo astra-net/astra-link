@@ -1,18 +1,18 @@
 const { Bridge } = require("./bridge");
 const { EthBridge } = require("./ethBridge");
-const { HmyBridge } = require("./hmyBridge");
+const { AstraBridge } = require("./astraBridge");
 const { FaucetERC20, ERC20 } = require("./token");
 const { EthWeb3 } = require("../lib/ethWeb3");
 const FakeClient = require("./abi/EthereumLightClient.json");
 
-async function deployBridges(ethUrl, hmyUrl) {
+async function deployBridges(ethUrl, astraUrl) {
     const ethBridge = await EthBridge.deploy(ethUrl);
-    const hmyBridge = await HmyBridge.deploy(hmyUrl);
-    await hmyBridge.Initialize();
-    await hmyBridge.Bind(ethBridge.contract._address);
+    const astraBridge = await AstraBridge.deploy(astraUrl);
+    await astraBridge.Initialize();
+    await astraBridge.Bind(ethBridge.contract._address);
     await ethBridge.Initialize();
-    await ethBridge.Bind(hmyBridge.contract._address);
-    return { ethBridge, hmyBridge };
+    await ethBridge.Bind(astraBridge.contract._address);
+    return { ethBridge, astraBridge };
 }
 
 async function tokenMap(
@@ -23,9 +23,9 @@ async function tokenMap(
     token
 ) {
     const srcBridge = new EthBridge(srcUrl, srcBridgeAddress);
-    const destBridge = new HmyBridge(destUrl, destBridgeAddress);
+    const destBridge = new AstraBridge(destUrl, destBridgeAddress);
     await Bridge.TokenMap(srcBridge, destBridge, token);
-    return { ethBridge: srcBridge, hmyBridge: destBridge };
+    return { ethBridge: srcBridge, astraBridge: destBridge };
 }
 
 async function tokenTo(
@@ -38,14 +38,14 @@ async function tokenTo(
     amount
 ) {
     const srcBridge = new EthBridge(srcUrl, srcBridgeAddress);
-    const destBridge = new HmyBridge(destUrl, destBridgeAddress);
+    const destBridge = new AstraBridge(destUrl, destBridgeAddress);
 
     if (amount > 0) {
         const erc20 = new ERC20(srcBridge.web3, token);
         await erc20.approve(srcBridge.contract._address, amount);
         await Bridge.TokenTo(srcBridge, destBridge, token, receipt, amount);
     }
-    return { ethBridge: srcBridge, hmyBridge: destBridge };
+    return { ethBridge: srcBridge, astraBridge: destBridge };
 }
 
 async function tokenBack(
@@ -57,14 +57,14 @@ async function tokenBack(
     receipt,
     amount
 ) {
-    const srcBridge = new HmyBridge(srcUrl, srcBridgeAddress);
+    const srcBridge = new AstraBridge(srcUrl, srcBridgeAddress);
     const destBridge = new EthBridge(destUrl, destBridgeAddress);
     if (amount > 0) {
         const erc20 = new ERC20(srcBridge.web3, token);
         await erc20.approve(srcBridge.contract._address, amount);
         await Bridge.TokenBack(srcBridge, destBridge, token, receipt, amount);
     }
-    return { hmyBridge: srcBridge, ethBridge: destBridge };
+    return { astraBridge: srcBridge, ethBridge: destBridge };
 }
 
 function ChangeLightClient(rpcUrl, bridgeAddress, clientAddress) {

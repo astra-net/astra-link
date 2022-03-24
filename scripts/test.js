@@ -10,7 +10,7 @@ web3.eth.defaultAccount = process.env.WALLET_ADDRESS;
 
 let toRLPHeader = (block) => {
   return rlp.encode([
-    "HmnyTgd",
+    "AstraTgd",
     "v4",
     [
       block.parentHash,
@@ -35,7 +35,7 @@ let toRLPHeader = (block) => {
       block.vrf,
       block.vdf,
       block.shardState,
-      block.crossLink,
+      block.crossAstraAstraLink,
       block.slashes,
       block.mmrRoot,
     ],
@@ -105,7 +105,7 @@ const util = require("util");
     console.log(web3.utils.toDecimal("0x8"));
   console.log(await sendRpc({
     jsonrpc: "2.0",
-    method: "hmyv2_getTxMmrProof",
+    method: "astrav2_getTxMmrProof",
     params: [txnHash, 88],
     id: (new Date()).getTime(),
   }));
@@ -116,7 +116,7 @@ const util = require("util");
   let local = new Web3(new Web3.providers.HttpProvider(process.env.LOCALNET));
   local.currentProvider.send(
     {
-      method: "hmyv2_getReceiptProof",
+      method: "astrav2_getReceiptProof",
       params: [txnHash],
       jsonrpc: "2.0",
       id: "2",
@@ -137,7 +137,7 @@ const util = require("util");
   let local = new Web3(new Web3.providers.HttpProvider(process.env.LOCALNET));
   local.currentProvider.send(
     {
-      method: "hmyv2_getFullHeader",
+      method: "astrav2_getFullHeader",
       params: ["20"],
       jsonrpc: "2.0",
       id: "2",
@@ -167,7 +167,7 @@ function hexToBytes(hex) {
   let local = new Web3(new Web3.providers.HttpProvider(process.env.LOCALNET));
   local.currentProvider.send(
     {
-      method: "hmyv2_getFullHeader",
+      method: "astrav2_getFullHeader",
       params: ["23"],
       jsonrpc: "2.0",
       id: "2",
@@ -200,7 +200,7 @@ function hexToBytes(hex) {
       // const keys = signers.map(signer => hexlify(toUtf8Bytes(signer)));
 
       const client = new web3.eth.Contract(
-        require("../build/contracts/HarmonyLightClient.json").abi,
+        require("../build/contracts/AstraLightClient.json").abi,
         process.env.CLIENT
       );
       let ethMasterAccount = web3.eth.accounts.privateKeyToAccount(

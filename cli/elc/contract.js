@@ -1,11 +1,11 @@
 const Client = require("../../tools/elc/abi/EthereumLightClient.json");
-const { HmyWeb3 } = require("../lib/hmyWeb3");
+const { AstraWeb3 } = require("../lib/astraWeb3");
 const { BN } = require("ethereumjs-util");
 
-async function deployELC(hmyUrl, rlpHeader) {
-    const hmyWeb3 = new HmyWeb3(hmyUrl);
-    const tx = hmyWeb3.ContractDeploy(Client.abi, Client.bytecode, [rlpHeader]);
-    const elc = await hmyWeb3.sendTx(tx); //options.address
+async function deployELC(astraUrl, rlpHeader) {
+    const astraWeb3 = new AstraWeb3(astraUrl);
+    const tx = astraWeb3.ContractDeploy(Client.abi, Client.bytecode, [rlpHeader]);
+    const elc = await astraWeb3.sendTx(tx); //options.address
     const gas = await elc.methods.initialize(rlpHeader).estimateGas();
     await elc.methods.initialize(rlpHeader).send({gas});
     return elc;
@@ -22,9 +22,9 @@ function printBlock(block) {
     console.log(blockFormat);
 }
 
-async function statusELC(hmyUrl, elcAddress) {
-    const hmyWeb3 = new HmyWeb3(hmyUrl);
-    const ELC = hmyWeb3.ContractAt(Client.abi, elcAddress);
+async function statusELC(astraUrl, elcAddress) {
+    const astraWeb3 = new AstraWeb3(astraUrl);
+    const ELC = astraWeb3.ContractAt(Client.abi, elcAddress);
     const elcMethods = ELC.methods;
 
     const finalityConfirms = await elcMethods.finalityConfirms().call();

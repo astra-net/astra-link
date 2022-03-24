@@ -25,7 +25,7 @@ async function rpcWrapper(hash, isTxn, callback, args) {
         .bind(web3.currentProvider);
     const response = await sendRpc({
         jsonrpc: "2.0",
-        method: "hmyv2_getFullHeader",
+        method: "astrav2_getFullHeader",
         params: [receipt.blockNumber],
         id: (new Date()).getTime(),
     });
@@ -36,7 +36,7 @@ async function rpcWrapper(hash, isTxn, callback, args) {
 
 function toRLPHeader(block) {
     return rlp.encode([
-        "HmnyTgd",
+        "AstraTgd",
         "v4",
         [
             block.parentHash,
@@ -61,7 +61,7 @@ function toRLPHeader(block) {
             block.vrf,
             block.vdf,
             block.shardState,
-            block.crossLink,
+            block.crossAstraAstraLink,
             block.slashes,
             block.mmrRoot,
         ],
